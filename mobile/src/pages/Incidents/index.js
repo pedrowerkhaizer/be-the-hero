@@ -27,7 +27,7 @@ export default function Incidents() {
                 style={styles.incidentsList} 
                 data={[1, 2, 3, 4, 5]}
                 keyExtractor={incident => String(incident)}
-                showsVerticalScrollIndicator={flase}
+                showsVerticalScrollIndicator={false}
                 renderItem={() => (
                     <View style={styles.incidentItem}>
                         <Text style={styles.incidentProperty}>ONG:</Text>
@@ -45,7 +45,7 @@ export default function Incidents() {
                             <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
                             <Feather name="arrow-right" size={16} color="#E02041" />
                         </TouchableOpacity>
-                </View>
+                    </View>
                 )}
             />
         </View>
