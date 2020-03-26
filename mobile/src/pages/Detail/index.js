@@ -1,15 +1,20 @@
 import React from 'react';
-import { Feather } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons';
 import { View, TouchableOpacity, Image, Text, Linking } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import * as MailComposer from 'expo-mail-composer'
+import { useNavigation, useRoute } from '@react-navigation/native';
+import * as MailComposer from 'expo-mail-composer';
 
 import styles from './styles';
 import logoImg from '../../assets/logo.png';
 
 export default function Detail() {
     const navigation = useNavigation();
-    const message= 'Olá WKZR, estou entrando em contato pois gostaria de ajudar no caso "Cadelinha cheia de amor" com o valor de R$ 120,00';
+    const route = useRoute();
+
+    const incident = route.params.incident;
+    const message= `Olá ${incident.name}, estou entrando em contato pois gostaria de ajudar no caso "${incident.title}" com o valor de ${Intl.NumberFormat('pt-BR', {style: 'currency',currency: 'BRL'}).format(incident.value)}.
+
+Enviado com amor através app Be The Hero <3`;
 
     function navigateBack() {
         navigation.goBack();
@@ -18,14 +23,14 @@ export default function Detail() {
     function sendMail() {
         //expo install expo-mail-composer
         MailComposer.composeAsync({
-            subject: 'Herói do Caso: Cadelinha cheia de amor',
-            recipients: ['ongemail@mail.com'],
+            subject: `Herói do Caso: ${incident.title}`,
+            recipients: [incident.email],
             body: message,
         });
     };
 
     function sendWhatsApp() {
-        Linking.openURL(`whatsapp://send?phone=+5524981242495&text=${message}`)
+        Linking.openURL(`whatsapp://send?phone=+55${incident.whatsapp}&text=${message}`)
     };
 
     return (
@@ -39,13 +44,18 @@ export default function Detail() {
 
             <View style={styles.incidentItem}>
                         <Text style={[styles.incidentProperty, { marginTop: 0 }]}>ONG:</Text>
-                        <Text style={styles.incidentValue}>WKZR</Text>
+                        <Text style={styles.incidentValue}>{incident.name} de {incident.city}/{incident.uf}</Text>
                         
                         <Text style={styles.incidentProperty}>CASO:</Text>
-                        <Text style={styles.incidentValue}>Cadelinha cheia de amor</Text>
+                        <Text style={styles.incidentValue}>{incident.title}</Text>
 
                         <Text style={styles.incidentProperty}>VALOR:</Text>
-                        <Text style={styles.incidentValue}>R$ 120,00</Text>
+                        <Text style={styles.incidentValue}>
+                            {Intl.NumberFormat('pt-BR',
+                             {style: 'currency',
+                              currency: 'BRL'})
+                              .format(incident.value)}
+                        </Text>
 
                     
                     </View>
