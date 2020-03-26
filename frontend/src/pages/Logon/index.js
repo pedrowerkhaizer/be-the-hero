@@ -12,6 +12,16 @@ export default function Logon() {
     const [id, setId] = useState('');
     const history = useHistory();
 
+    function getIdFromLocalStorage() {
+        try {
+            const ongId = localStorage.getItem('ongId');
+            setId(ongId);
+        } catch (err) {
+            console.log('No ID found in local storage.');
+        }
+    }
+
+
     async function handleLogon(e) {
         e.preventDefault();
 
@@ -29,7 +39,10 @@ export default function Logon() {
     }
 
     return (
-        <div className="logon-container">
+        <div 
+        className="logon-container" 
+        onLoad={getIdFromLocalStorage} >
+            
             <section className="form">
                 <img src={logoImg} alt="Be The Hero"/>
 
